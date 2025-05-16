@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:practica_3/pages/home_navigation_bar_page.dart';
+import 'package:practica_3/pages/recovery_password_page.dart';
+import 'package:practica_3/pages/sign_up_page.dart';
+import 'package:practica_3/repository/firebase_api.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -10,6 +14,8 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   final _email = TextEditingController();
   final _password = TextEditingController();
+
+  final FirebaseApi _firebaseApi = FirebaseApi();
 
   bool _obscurePassword = true;
 
@@ -73,7 +79,7 @@ class _SignInPageState extends State<SignInPage> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: _onSignInButtonClicked,
                     child: const Text("Iniciar sesión"),
                   ),
                   const SizedBox(height: 80),
@@ -82,7 +88,14 @@ class _SignInPageState extends State<SignInPage> {
                       foregroundColor: Color(0xFF0F8555).withValues(alpha: 0.7),
                       textStyle: const TextStyle(fontSize: 15),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SignUpPage(),
+                        ),
+                      );
+                    },
                     child: const Text("¿Primera vez en SportLink? Registrate"),
                   ),
                   const SizedBox(height: 12),
@@ -91,13 +104,55 @@ class _SignInPageState extends State<SignInPage> {
                       foregroundColor: Color(0xFF0F8555).withValues(alpha: 0.7),
                       textStyle: const TextStyle(fontSize: 15),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RecoveryPasswordPage(),
+                        ),
+                      );
+                    },
                     child: Text("¿Olvidaste tu contraseña?"),
                   ),
                 ],
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  void _onSignInButtonClicked() async {
+    if (_email.text.isEmpty || _password.text.isEmpty) {
+      showMsg("Debe completar todos los campos");
+    } else {
+      var result = await _firebaseApi.signInUser(_email.text, _password.text);
+      if (result == 'invalid-credential') {
+        showMsg("Correo electrónico o contraseña incorrecta.");
+      } else if (result == 'invalid-email') {
+        showMsg("El correo electronico está mal escrito");
+      } else if (result == 'network-request-failed') {
+        showMsg("Revise su conexion a Internet");
+      } else {
+        showMsg("Bienvenido");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeNavigationBarPage()),
+        );
+      }
+    }
+  }
+
+  void showMsg(String msg) {
+    final scafflold = ScaffoldMessenger.of(context);
+    scafflold.showSnackBar(
+      SnackBar(
+        content: Text(msg),
+        duration: Duration(seconds: 10),
+        action: SnackBarAction(
+          label: "Aceptar",
+          onPressed: scafflold.hideCurrentSnackBar,
         ),
       ),
     );
