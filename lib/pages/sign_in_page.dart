@@ -65,16 +65,34 @@ class _SignInPageState extends State<SignInPage> {
                   const SizedBox(height: 30),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Color(0xFF0F8555),
-                        fixedSize: const Size(400, 60),
-                        textStyle: const TextStyle(fontSize: 20),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        )
+                      foregroundColor: Colors.white,
+                      backgroundColor: Color(0xFF0F8555),
+                      fixedSize: const Size(400, 60),
+                      textStyle: const TextStyle(fontSize: 20),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
                     onPressed: () {},
                     child: const Text("Iniciar sesión"),
+                  ),
+                  const SizedBox(height: 80),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Color(0xFF0F8555).withValues(alpha: 0.7),
+                      textStyle: const TextStyle(fontSize: 15),
+                    ),
+                    onPressed: () {},
+                    child: const Text("¿Primera vez en SportLink? Registrate"),
+                  ),
+                  const SizedBox(height: 12),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Color(0xFF0F8555).withValues(alpha: 0.7),
+                      textStyle: const TextStyle(fontSize: 15),
+                    ),
+                    onPressed: () {},
+                    child: Text("¿Olvidaste tu contraseña?"),
                   ),
                 ],
               ),
